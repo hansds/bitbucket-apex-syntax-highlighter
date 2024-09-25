@@ -36,13 +36,24 @@ hljs.registerLanguage('apex', hljsApex);
 function highlightLinesWrapper(el: HTMLElement) {
   const preElements = el.querySelectorAll('pre.code-component');
 
+  // The first div child has an id, we parse it to get the language
+  const language = el.firstElementChild?.id ?? '';
+  // Use regex to capture the first three characters after the last dot
+  const extensionRegex = /\.(\w{3})[A-Za-z0-9]*$/;
+  const match = language.match(extensionRegex);
+  const isApex = match && match[1] === 'cls';
+
+  if (!isApex) {
+    return;
+  }
+
   preElements.forEach((pre) => {
     // Get the text content of the pre element
     const codeText = pre.textContent || '';
 
     // Create a new code element
     const codeElement = document.createElement('code');
-    codeElement.className = 'language-apex';
+    codeElement.className = `language-apex`;
     codeElement.textContent = codeText;
 
     // Apply highlight.js
