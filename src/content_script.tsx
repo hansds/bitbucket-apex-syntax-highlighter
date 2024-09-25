@@ -10,9 +10,15 @@ if (window.location.hostname === 'bitbucket.org') {
     mutations.forEach((mutation) => {
       if (mutation.type === 'childList') {
         mutation.addedNodes.forEach((node) => {
+          // Direct lines-wrapper
           if (node instanceof HTMLElement && node.classList.contains('lines-wrapper')) {
-            console.log('Element with class "lines-wrapper" added to the DOM');
             highlightLinesWrapper(node);
+          }
+          // Indirect lines-wrapper added in chunk-wrapper
+          else if (node instanceof HTMLElement && node.classList.contains('chunk-wrapper')) {
+            node.querySelectorAll('.lines-wrapper').forEach((linesWrapper) => {
+              highlightLinesWrapper(linesWrapper as HTMLElement);
+            });
           }
         });
       }
