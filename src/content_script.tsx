@@ -1,7 +1,8 @@
 import hljs from 'highlight.js/lib/core';
-import java from 'highlight.js/lib/languages/java';
+import hljsApex from 'highlightjs-apex';
 
 import './content_styles.css';
+import { LanguageFn } from 'highlight.js';
 
 // Check if the current domain is bitbucket.org
 if (window.location.hostname === 'bitbucket.org') {
@@ -29,8 +30,8 @@ if (window.location.hostname === 'bitbucket.org') {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Register the Java language with highlight.js
-hljs.registerLanguage('java', java);
+// Register the Apex language with highlight.js
+hljs.registerLanguage('apex', hljsApex);
 
 function highlightLinesWrapper(el: HTMLElement) {
   const preElements = el.querySelectorAll('pre.code-component');
@@ -41,7 +42,7 @@ function highlightLinesWrapper(el: HTMLElement) {
 
     // Create a new code element
     const codeElement = document.createElement('code');
-    codeElement.className = 'language-java';
+    codeElement.className = 'language-apex';
     codeElement.textContent = codeText;
 
     // Apply highlight.js
