@@ -7,9 +7,8 @@ import './content_styles.css';
 const isBitbucketDiff = window.location.hostname === 'bitbucket.org'
 const isPullRequest = window.location.pathname.includes('/pull-requests');
 const isCommit = window.location.pathname.includes('/commits');
-const isSource = window.location.pathname.includes('/src');
 
-if (isBitbucketDiff && (isPullRequest || isCommit || isSource)) {
+if (isBitbucketDiff && (isPullRequest || isCommit)) {
   // Create a MutationObserver to watch for DOM changes
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
