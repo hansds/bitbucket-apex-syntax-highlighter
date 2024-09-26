@@ -1,8 +1,7 @@
-import hljs from 'highlight.js/lib/core';
-import hljsApex from 'highlightjs-apex';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-apex';
 
 import './content_styles.css';
-import { LanguageFn } from 'highlight.js';
 
 // Check if the current domain is bitbucket.org
 if (window.location.hostname === 'bitbucket.org') {
@@ -30,9 +29,6 @@ if (window.location.hostname === 'bitbucket.org') {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Register the Apex language with highlight.js
-hljs.registerLanguage('apex', hljsApex);
-
 function highlightLinesWrapper(el: HTMLElement) {
   const preElements = el.querySelectorAll('pre.code-component');
 
@@ -53,11 +49,11 @@ function highlightLinesWrapper(el: HTMLElement) {
 
     // Create a new code element
     const codeElement = document.createElement('code');
-    codeElement.className = `language-apex`;
+    codeElement.className = 'language-apex';
     codeElement.textContent = codeText;
 
-    // Apply highlight.js
-    hljs.highlightElement(codeElement);
+    // Apply Prism highlighting
+    Prism.highlightElement(codeElement);
 
     // Replace the content of the pre element with the highlighted code
     pre.innerHTML = '';

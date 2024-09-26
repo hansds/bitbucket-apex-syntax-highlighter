@@ -1,1 +1,4 @@
-@import '~highlight.js/styles/github.css';
+/* Overrides */
+pre.code-component code.language-apex{
+    font-size: 1em;
+}
