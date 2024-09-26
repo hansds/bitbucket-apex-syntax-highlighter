@@ -4,21 +4,23 @@ import 'prismjs/components/prism-apex';
 import './content_styles.css';
 
 // Check if the current domain is bitbucket.org
-if (window.location.hostname === 'bitbucket.org') {
+const isBitbucketDiff = window.location.hostname === 'bitbucket.org'
+const isPullRequest = window.location.pathname.includes('/pull-requests');
+const isCommit = window.location.pathname.includes('/commits');
+const isSource = window.location.pathname.includes('/src');
+
+if (isBitbucketDiff && (isPullRequest || isCommit || isSource)) {
   // Create a MutationObserver to watch for DOM changes
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === 'childList') {
         mutation.addedNodes.forEach((node) => {
-          // Direct lines-wrapper
-          if (node instanceof HTMLElement && node.classList.contains('lines-wrapper')) {
+          if (!(node instanceof HTMLElement)) return;
+          else if (node.classList.contains('lines-wrapper')) {
             highlightLinesWrapper(node);
           }
-          // Indirect lines-wrapper added in chunk-wrapper
-          else if (node instanceof HTMLElement && node.classList.contains('chunk-wrapper')) {
-            node.querySelectorAll('.lines-wrapper').forEach((linesWrapper) => {
-              highlightLinesWrapper(linesWrapper as HTMLElement);
-            });
+          else {
+            findLinesWrapperAndHighlight(node);
           }
         });
       }
@@ -29,13 +31,18 @@ if (window.location.hostname === 'bitbucket.org') {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function highlightLinesWrapper(el: HTMLElement) {
-  const preElements = el.querySelectorAll('pre.code-component');
+function findLinesWrapperAndHighlight(el: HTMLElement) {
+  el.querySelectorAll('.lines-wrapper').forEach((linesWrapper) => {
+    highlightLinesWrapper(linesWrapper as HTMLElement);
+  });
+}
 
+function highlightLinesWrapper(el: HTMLElement) {
+  const codeElements = el.querySelectorAll('pre.code-component>span>span');
   // The first div child has an id, we parse it to get the language
   const language = el.firstElementChild?.id ?? '';
   // Use regex to capture the first three characters after the last dot
-  const extensionRegex = /\.(\w{3})[A-Za-z0-9]*$/;
+  const extensionRegex = /\.(\w{3})[A-Za-z0-9_]*$/;
   const match = language.match(extensionRegex);
   const isApex = match && match[1] === 'cls';
 
@@ -43,20 +50,31 @@ function highlightLinesWrapper(el: HTMLElement) {
     return;
   }
 
-  preElements.forEach((pre) => {
-    // Get the text content of the pre element
-    const codeText = pre.textContent || '';
-
-    // Create a new code element
-    const codeElement = document.createElement('code');
-    codeElement.className = 'language-apex';
-    codeElement.textContent = codeText;
-
-    // Apply Prism highlighting
-    Prism.highlightElement(codeElement);
-
-    // Replace the content of the pre element with the highlighted code
-    pre.innerHTML = '';
-    pre.appendChild(codeElement);
+  codeElements.forEach((codeElement) => {
+    codeElement.innerHTML = getHighlightedCode(codeElement as HTMLElement);
   });
+}
+
+/**
+ * We want to highlight the code inside the code element, but we want to keep the HTML tags such as <ins> and <del> for the diff view
+ */
+function getHighlightedCode(codeElement: HTMLElement) {
+    const htmlContent = codeElement.innerHTML;
+
+    // Use a regular expression to split the content into text and HTML tags
+    const parts = htmlContent.split(/(<.*?>)/);
+
+    const highlightedParts = parts.map(part => {
+        if (part.startsWith('<') && part.endsWith('>')) {
+            // If it's an HTML tag, return it as is
+            return part;
+        } else {
+          // If it's text content, highlight it
+          const cleanedPart = part.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+          return Prism.highlight(cleanedPart, Prism.languages.apex, 'apex');
+        }
+    });
+
+    return highlightedParts.join('');
 }

@@ -1,4 +1,9 @@
 /* Overrides */
-pre.code-component code.language-apex{
-    font-size: 1em;
+
+.lines-wrapper .token.operator {
+    color: var(--ds-text-accent-purple, #000);
+}
+
+.lines-wrapper .token.function {
+    color: var(--ds-text-accent-blue, #000);
 }
