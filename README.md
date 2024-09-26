@@ -1,70 +1,15 @@
-# Chrome Extension TypeScript Starter
+# BitBucket Apex Syntax Highlighter
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
+## Installation Instructions
 
-Chrome Extension, TypeScript and Visual Studio Code
+To use this as an unpacked Chrome extension, follow these steps:
 
-## Prerequisites
-
-* [node + npm](https://nodejs.org/) (Current Version)
-
-## Option
-
-* [Visual Studio Code](https://code.visualstudio.com/)
-
-## Includes the following
-
-* TypeScript
-* Webpack
-* React
-* Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
-
-## Project Structure
-
-* src/typescript: TypeScript source files
-* src/assets: static files
-* dist: Chrome Extension directory
-* dist/js: Generated JavaScript files
-
-## Setup
-
-```
-npm install
-```
-
-## Import as Visual Studio Code project
-
-...
-
-## Build
-
-```
-npm run build
-```
-
-## Build in watch mode
-
-### terminal
-
-```
-npm run watch
-```
-
-### Visual Studio Code
-
-Run watch mode.
-
-type `Ctrl + Shift + B`
-
-## Load extension to chrome
-
-Load `dist` directory
-
-## Test
-`npx jest` or `npm run test`
+1. Clone or download this repository to your local machine.
+2. Open a terminal and navigate to the root directory of the project.
+3. Run `npm install` to install the necessary dependencies.
+4. Run `npm run build` to build the extension. This will create a `dist` directory.
+5. Open Google Chrome and navigate to `chrome://extensions/`.
+6. Enable "Developer mode" by toggling the switch in the top right corner.
+7. Click on "Load unpacked" button in the top left corner.
+8. Select the `dist` directory that was created in step 4.
+9. The extension should now appear in your list of installed extensions and be ready to use.
