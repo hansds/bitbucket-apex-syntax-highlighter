@@ -1,19 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, Visual Studio Code",
+  "name": "BitBucket Apex Syntax Highlighter",
+  "description": "This extension highlights Apex code in BitBucket diffs.",
   "version": "1.0",
-  "options_ui": {
-    "page": "options.html"
-  },
-  "action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+  "icons": {
+    "128": "logo-app-gradient-square@128.png"
   },
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "https://bitbucket.org/*"
       ],
       "js": [
         "js/vendor.js",
@@ -24,13 +20,7 @@
       ]
     }
   ],
-  "background": {
-    "service_worker": "js/background.js"
-  },
-  "permissions": [
-    "storage"
-  ],
   "host_permissions": [
-    "<all_urls>"
+    "https://bitbucket.org/*"
   ]
 }
